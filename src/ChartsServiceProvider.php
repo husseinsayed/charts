@@ -2,7 +2,6 @@
 
 namespace HusseinSayed\Charts;
 
-use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class ChartsServiceProvider extends ServiceProvider
@@ -12,23 +11,15 @@ class ChartsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(Router $router)
+    public function boot()
     {
         $this->publishes([
-            __DIR__.'/Config/charts.php' => config_path('charts.php'),
+            __DIR__.'/../config/charts.php' => config_path('charts.php'),
         ], 'charts_config');
 
-        $this->loadViewsFrom(__DIR__.'/Views', 'charts');
-
         $this->publishes([
-            __DIR__.'/Views' => resource_path('views/vendor/charts'),
-        ]);
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                \HusseinSayed\Charts\Commands\ChartsCommand::class,
-            ]);
-        }
+            __DIR__.'/Assets' => public_path('vendor/husseinsayed/charts'),
+        ], 'charts_assets');
     }
 
     /**
@@ -39,8 +30,7 @@ class ChartsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/Config/charts.php',
-            'charts'
+            __DIR__.'/../config/charts.php', 'charts'
         );
     }
 }
